@@ -112,6 +112,8 @@ pre.letter{background:#0d1224;border:1px solid var(--line);border-radius:17px;pa
   .toprow{justify-content:center}
   .brand{font-size:1rem}
   .hero{padding:38px 0 6px}
+  .tabs{flex-wrap:wrap;justify-content:center;overflow-x:visible}
+  .hero-chips span{padding:8px 15px}
   .grid2{grid-template-columns:1fr}
   .row{grid-template-columns:1fr 1fr}
   .esc-n{width:42px;height:42px;border-radius:13px;font-size:1rem}
