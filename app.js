@@ -22,7 +22,7 @@
       ["Sent the photos to the landlord on WhatsApp same day", "Ask for a one-line acknowledgment. A record both sides saw beats ten you kept private."],
       ["Meter readings photographed (electricity + water)", "Date them. Prevents 'unpaid bills' surprises."],
       ["Owner identity verified (khata / sale-deed name match)", "Sublet-and-vanish deposit fraud is real in high-churn areas."],
-      ["Deposit paid by bank transfer with a note", "Never cash. The trail is evidence."],
+      ["Deposit paid by bank transfer with a note", "Never cash. The trail is evidence."]
     ]},
     { name: "Before signing: the clauses that decide your refund", items: [
       ["Painting clause negotiated (pro-rata, waived after 24 months, or invoice-only)", "The most abused clause in Bengaluru; one month's rent for painting is normalized, not lawful."],
@@ -30,19 +30,19 @@
       ["Lock-in and notice-period forfeiture understood", "Know exactly what leaving early costs."],
       ["Rent escalation capped at 5%", "Some landlords impose 10% against the agreement; cap it in writing."],
       ["Agreement registered (not just notarized soft copy)", "Changes your legal position entirely if the exit turns hostile."],
-      ["You hold your own signed copy", "One landlord withheld \u20B910,000 until the tenant returned her copy."],
+      ["You hold your own signed copy", "One landlord withheld \u20B910,000 until the tenant returned her copy."]
     ]},
     { name: "During the tenancy", items: [
       ["Rent receipts or bank trail every month", "No exceptions."],
       ["Repairs reported in writing, replies kept", "Verbal 'I'll fix it' disappears at move-out."],
-      ["One folder holds agreement, payments, photos, messages", "Scrambling for evidence months later is how disputes are lost."],
+      ["One folder holds agreement, payments, photos, messages", "Scrambling for evidence months later is how disputes are lost."]
     ]},
     { name: "Move-out week", items: [
       ["Exit walkthrough video, every room, dated", "Same day as cleaning."],
       ["Professional deep clean paid by you, receipt kept", "Prices the cleaning claim at market instead of leaving it open."],
       ["Keys handed over in writing with date and meter readings", "Written handover starts the refund clock."],
-      ["No full-and-final signed under pressure", "Once signed, it is the landlord's shield."],
-    ]},
+      ["No full-and-final signed under pressure", "Once signed, it is the landlord's shield."]
+    ]}
   ];
   var KEY = "dshield.movein.v1";
   var state = JSON.parse(localStorage.getItem(KEY) || "[]");
@@ -111,6 +111,44 @@
     a.click();
   });
 
+  /* ---------- print-to-PDF (no libraries, works offline) ---------- */
+  function printHtml(title, bodyHtml) {
+    var css = "body{font-family:Georgia,'Times New Roman',serif;color:#111;max-width:720px;margin:36px auto;padding:0 24px;line-height:1.55}" +
+      "h1{font-size:20px;margin:0 0 2px}h2{font-size:14px;margin:22px 0 6px;border-bottom:1px solid #999;padding-bottom:3px;text-transform:uppercase;letter-spacing:.06em}" +
+      ".meta{color:#555;font-size:12px;margin:0 0 18px}.item{margin:5px 0}.box{display:inline-block;width:12px;height:12px;border:1.5px solid #333;margin-right:8px;vertical-align:-2px}" +
+      ".box.on{background:#333}.why{color:#666;font-size:11px;margin:1px 0 0 20px}" +
+      "footer{margin-top:28px;padding-top:10px;border-top:1px solid #999;font-size:11px;color:#555}" +
+      "pre{white-space:pre-wrap;font-family:Georgia,serif;font-size:12.5px;line-height:1.6}";
+    var doc = "<!doctype html><html><head><meta charset='utf-8'><title>" + title + "</title><style>" + css + "</style></head><body>" + bodyHtml + "</body></html>";
+    var frame = document.createElement("iframe");
+    frame.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden";
+    document.body.appendChild(frame);
+    var d = frame.contentDocument || frame.contentWindow.document;
+    d.open(); d.write(doc); d.close();
+    var go = function () { try { frame.contentWindow.focus(); frame.contentWindow.print(); } catch (e) {} }
+    setTimeout(function () { if (frame.parentNode) document.body.removeChild(frame); }, 60000);
+    if (d.readyState === "complete") setTimeout(go, 150); else frame.onload = function () { setTimeout(go, 150); };
+  }
+  function evidenceHtml() {
+    var today = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+    var body = "<h1>Move-in deposit record</h1><p class=meta>Prepared " + today + " \u00B7 kept on this device \u00B7 nothing was uploaded anywhere</p>";
+    var idx = 0;
+    GROUPS.forEach(function (g) {
+      body += "<h2>" + g.name + "</h2>";
+      g.items.forEach(function (it) {
+        var on = state.indexOf(idx) > -1;
+        body += "<div class=item><span class='box" + (on ? " on" : "") + "'></span>" + it[0] + "</div><p class=why>" + it[1] + "</p>";
+        idx++;
+      });
+    });
+    body += "<footer>Prepared with Deposit Shield (deposit evidence kit). Documents and drafts only \u2014 not legal advice.</footer>";
+    return body;
+  }
+  $("#mi-pdf").addEventListener("click", function () {
+    printHtml("Move-in deposit record \u2014 Deposit Shield", evidenceHtml());
+    $("#mi-copyhint").textContent = "Choose 'Save as PDF' in the print dialog to keep a dated copy.";
+  });
+
   /* ---------- clause reader ---------- */
   var RULES = [
     { name: "Painting", re: /paint\w*/i, severity: function (t) {
@@ -146,7 +184,7 @@
       } },
     { name: "Full and final", re: /full[- ]and[- ]final/i, severity: function () {
         return ["warn", "A full-and-final clause exists. Never sign it under pressure at handover; once signed it is the landlord's shield against your challenge."];
-      } },
+      } }
   ];
   $("#reader-go").addEventListener("click", function () {
     var t = $("#reader-input").value;
@@ -265,7 +303,7 @@
 "Prepared with Deposit Shield. Documents and drafts only \u2014 not legal advice. Review with a lawyer before sending if the amount is significant.";
     var html = '<div class="flag warn"><span class="chip">DEMAND LETTER</span>Send by WhatsApp <em>and</em> email (or registered post) so there is proof of service. A written demand naming the next forum, with a 15-day deadline, settles most disputes before filing.</div>' +
       '<pre class="letter" id="ch-lettertext"></pre>' +
-      '<div class="actions"><button class="btn primary" id="ch-copyletter">Copy letter</button><button class="btn" id="ch-dlletter">Download .txt</button></div>';
+      '<div class="actions"><button class="btn primary" id="ch-copyletter">Copy letter</button><button class="btn" id="ch-dlletter">Download .txt</button><button class="btn" id="ch-printletter">Print / save as PDF</button></div>';
     $("#ch-out").insertAdjacentHTML("beforeend", html);
     $("#ch-lettertext").textContent = letter;
     $("#ch-copyletter").addEventListener("click", function () {
@@ -278,6 +316,12 @@
       a.href = URL.createObjectURL(blob);
       a.download = "deposit-demand-letter.txt";
       a.click();
+    });
+    $("#ch-printletter").addEventListener("click", function () {
+      printHtml("Deposit demand letter \u2014 Deposit Shield",
+        "<h1>Demand for refund of security deposit</h1><p class=meta>" + ($("#ch-tenant").value || "[Your name]") + " \u00B7 " + ($("#ch-address").value || "[property address]") + "</p><pre>" +
+        letter.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</pre>" +
+        "<footer>Prepared with Deposit Shield. Documents and drafts only \u2014 not legal advice.</footer>");
     });
     $("#ch-lettertext").scrollIntoView({ behavior: "smooth", block: "start" });
   });
