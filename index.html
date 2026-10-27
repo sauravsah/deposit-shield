@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deposit Shield — Keep your full security deposit back</title>
+<meta name="description" content="The Bengaluru tenant's deposit kit: move-in evidence checklist, agreement clause reader, deduction challenger and escalation map. Free, works offline, data stays on your device.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+<header class="top">
+  <div class="wrap toprow">
+    <div class="brand"><span class="shield">🛡️</span> Deposit Shield</div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="movein" role="tab">Move-in kit</button>
+      <button class="tab" data-tab="reader" role="tab">Clause reader</button>
+      <button class="tab" data-tab="challenger" role="tab">Deduction challenger</button>
+      <button class="tab" data-tab="escalate" role="tab">Escalation map</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="tab-movein" class="panel active">
+  <h1>Move-in kit</h1>
+  <p class="sub">Deposit disputes are won at move-in, not move-out. Work down this list on day one and send the landlord the WhatsApp summary. Everything saves on this device only.</p>
+  <div class="progressbar"><div id="mi-progress"></div></div>
+  <div id="mi-progresslabel" class="progresslabel">0 of 0 done</div>
+  <div id="mi-groups"></div>
+  <div class="actions">
+    <button id="mi-copy" class="btn primary">Copy WhatsApp summary for landlord</button>
+    <button id="mi-export" class="btn">Download my record (.txt)</button>
+  </div>
+  <p class="hint" id="mi-copyhint"></p>
+</section>
+
+<section id="tab-reader" class="panel">
+  <h1>Agreement clause reader</h1>
+  <p class="sub">Paste your rental agreement text. It flags the clauses that decide your refund before you sign, not after.</p>
+  <textarea id="reader-input" rows="8" placeholder="Paste the rental agreement text here…"></textarea>
+  <div class="actions"><button id="reader-go" class="btn primary">Analyse clauses</button></div>
+  <div id="reader-out"></div>
+</section>
+
+<section id="tab-challenger" class="panel">
+  <h1>Deduction challenger</h1>
+  <p class="sub">Enter the landlord's deduction sheet line by line. Lines without invoices or that bill normal wear and tear get flagged, and you get a written demand ready to send.</p>
+  <form id="ch-form">
+    <div class="grid2">
+      <label>Your name <input id="ch-tenant" placeholder="Full name"></label>
+      <label>Landlord name <input id="ch-landlord" placeholder="As in the agreement"></label>
+      <label>Flat address <input id="ch-address" placeholder="Property address"></label>
+      <label>Date you handed over keys <input id="ch-vacate" type="date"></label>
+      <label>Security deposit paid (₹) <input id="ch-deposit" type="number" min="0" placeholder="e.g. 100000"></label>
+      <label>Refund already received (₹) <input id="ch-refunded" type="number" min="0" placeholder="0"></label>
+    </div>
+  </form>
+  <h3>Deduction lines</h3>
+  <div id="ch-rows"></div>
+  <button id="ch-add" class="btn">+ Add a deduction line</button>
+  <div class="actions">
+    <button id="ch-analyse" class="btn primary">Flag the weak lines</button>
+    <button id="ch-letter" class="btn">Build my demand letter</button>
+  </div>
+  <div id="ch-out"></div>
+</section>
+
+<section id="tab-escalate" class="panel">
+  <h1>Escalation map</h1>
+  <p class="sub">If a written demand with a 15-day deadline gets you nothing, here is the ladder. Most disputes settle before the last rung.</p>
+  <div class="esc">
+    <div class="esc-step"><div class="esc-n">1</div><div><h4>Written demand (day 0)</h4><p>Itemized breakdown demanded with tax invoices, 15-day deadline, name the forum you'll use next. This alone settles most cases.</p></div></div>
+    <div class="esc-step"><div class="esc-n">2</div><div><h4>Legal notice (day 16)</h4><p>An advocate-drafted notice carries the most weight; a clear written demand from you is also valid. Jurisdiction: where the property is located, not where you moved. Three-year limitation.</p></div></div>
+    <div class="esc-step"><div class="esc-n">3</div><div><h4>Civil suit / Rent Authority</h4><p>Civil suit for recovery of money where the property sits. Tamil Nadu, Uttar Pradesh, Andhra Pradesh and Assam have direct Rent Authority routes; Karnataka practice is uneven, check current rules.</p></div></div>
+    <div class="esc-step"><div class="esc-n">4</div><div><h4>Consumer commission (e-Jagriti)</h4><p>Filed on e-Jagriti, no fee up to ₹5 lakh, but whether a tenant counts as a "consumer" is contested, so it may decline. Get advice before choosing this route.</p></div></div>
+  </div>
+  <div class="warn">What <em>not</em> to do: don't file a police FIR first for a pure money dispute (they treat it as civil), don't post on social media before a notice (defamation risk, not leverage), never sign a full-and-final settlement under pressure, and claim interest and costs in whatever you file — most tenants forget both.</div>
+</section>
+
+</main>
+
+<footer class="wrap foot">
+  <p><strong>Free during launch.</strong> Deposit Shield is documents and drafts only. It is not legal advice; for your specific dispute, talk to a lawyer. Your checklist and letters are stored only in this browser — nothing is uploaded anywhere.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
